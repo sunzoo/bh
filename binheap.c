@@ -25,6 +25,7 @@ struct binheap_s {
 };
 
 static void binheap_bubbleup(binheap_t *bh, size_t n);
+static void binheap_bubbledown(binheap_t *bh, size_t n);
 
 
 void 
@@ -52,12 +53,29 @@ binheap_insert(binheap_t *bh, void *e)
 }
 
 void * 
-binheap_min(binheap_t *bh)
+binheap_peek_min(binheap_t *bh)
 {
     void *min = NULL;
 
     if (bh->n_elt) {
         return bh->dynarr[1];
+    }
+
+    return min;
+}
+
+
+void * 
+binheap_extract_min(binheap_t *bh)
+{
+    void *min = NULL;
+    
+    if (bh->n_elt) {
+        min = bh->dynarr[1];
+        bh->dynarr[1] = bh->dynarr[bh->n_elt];
+        bh->n_elt--;
+
+        binheap_bubbledown(bh, 1);
     }
 
     return min;
@@ -97,4 +115,27 @@ binheap_bubbleup(binheap_t *bh, size_t n)
     }
 
     return;
+}
+
+static void
+binheap_bubbledown(binheap_t *bh, size_t n)
+{
+    size_t i, chi, mini;
+
+    chi = n * 2;    /* child index */
+    mini = n;       /* seed the min index */
+    
+    for (i = 0; i <= 1; i++) {
+        if (chi <= bh->n_elt) {
+            if (bh->cmp_fn(bh->dynarr[mini],
+                           bh->dynarr[chi + i])) {
+                mini = chi + i;
+            }
+        }
+    }
+
+    if (mini != n) {
+        binheap_swap(bh, n, mini);
+        binheap_bubbledown(bh, mini);
+    }
 }

@@ -22,7 +22,8 @@ typedef int (*app_cmp_fn_t)(void*, void*);
 
 void binheap_init(binheap_t **bh, app_cmp_fn_t cmp);
 void binheap_insert(binheap_t *binheap, void *e);
-void *binheap_min(binheap_t *bh);
+void *binheap_peek_min(binheap_t *bh);
+void *binheap_extract_min(binheap_t *bh);
 
 void binheap_set_allocator();
 void binheap_set_deallocator(void *);

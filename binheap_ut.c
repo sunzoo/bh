@@ -40,6 +40,12 @@ int main(int argc, char **argv)
         binheap_insert(bh, &inputa[i]);
     }
 
-    size_t *min = binheap_min(bh); 
+    size_t *min = binheap_peek_min(bh); 
     printf("Minimum element is %d\n", *min);
+    printf("=====================\n");
+
+    for (i = 0; i < (argc - 1); i++) {
+        size_t *min = binheap_extract_min(bh); 
+        printf("Minimum element is %d\n", *min);
+    }
 }
